@@ -8,12 +8,10 @@ import { fileURLToPath } from "url";
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// أنشئ مجلدات إذا لم تكن موجودة
-const ensureDir = (dir) => {
+// إنشاء المجلدات إذا لم تكن موجودة
+["uploads", "compressed"].forEach((dir) => {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir);
-};
-ensureDir("uploads");
-ensureDir("compressed");
+});
 
 const upload = multer({ dest: "uploads/" });
 
@@ -31,4 +29,4 @@ app.post("/compress", upload.single("video"), (req, res) => {
 });
 
 app.use("/compressed", express.static(path.join(__dirname, "compressed")));
-app.listen(process.env.PORT || 3000, () => console.log("Server is running"));
+app.listen(process.env.PORT || 3000, () => console.log("FFmpeg Server running"));
